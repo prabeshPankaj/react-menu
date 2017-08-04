@@ -5,8 +5,10 @@ import axios from 'axios';
 
 class Single extends React.Component{
     render () {
-        return <li className={ "nav__list__item "+ (this.props.isSelected ? 'active' : '') }><a href="javascript:void(0)"  onClick={() => this.props.onClick()}>{this.props.title}</a></li>;
-    }
+        return <li>
+				<a href={this.props.url} title={this.props.title} >{this.props.title}</a>
+			</li>;
+}
 }
 
 
@@ -15,7 +17,8 @@ class Menu extends React.Component {
     constructor(){
         super();
         this.state ={
-            menus: []
+            menus: [],
+            menuToggle:"",
         };   
     }
 
@@ -30,7 +33,9 @@ class Menu extends React.Component {
       });
     
     }
-    
+    ToggleMenu(){
+        this.setState({menuToggle: !this.state.menuToggle})
+    }  
     handleClick(i) {
         const menus = this.state.menus.slice();
         menus.forEach((key,value)=>{
@@ -47,20 +52,25 @@ class Menu extends React.Component {
     }
     render () {
         
-        return  <nav className="nav nav--red">
-                    <ul className="nav__list">
+        return  <div className={"open "+ (this.state.menuToggle ? 'oppenned' : '')} onClick={() => this.ToggleMenu()}>
+	                <span className="cls"></span>
+	                <span>
+                    <ul className="sub-menu ">
                     {this.state.menus.map((name, index)=>{
                         return <Single key={index} menu={name.name} title={name.title} url={name.url} isSelected={name.isSelected}
                                 onClick={() => this.handleClick(index)}
                                 />;
                     })}
-                    </ul>
-                </nav>;
+           	        </ul>
+	                </span>
+	                <span className="cls"></span>
+                </div>
     }
 }
 
     
 
+	
 
 
 render(<Menu/>, document.getElementById('app'));
